@@ -88,11 +88,9 @@
         function generatePassword() {
             const length = 16;
             let charSet = characters.uppercase + characters.lowercase + characters.numbers + characters.symbols;
-            let password = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * charSet.length);
-                password += charSet[randomIndex];
-            }
+            let passwordArray = new Uint8Array(length);
+            window.crypto.getRandomValues(passwordArray);
+            let password = Array.from(passwordArray, byte => charSet[byte % charSet.length]).join('');
             document.getElementById('password').textContent = password;
         }
     </script>
