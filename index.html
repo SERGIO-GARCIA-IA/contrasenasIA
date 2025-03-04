@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Contraseñas Seguras</title>
     <style>
-        /* Reset básico y variables CSS */
         :root {
             --primary-color: #1a73e8;
             --bg-light: #ffffff;
@@ -16,9 +15,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Roboto', sans-serif;
-            background: url('imagenes/fondo_1.jpg') no-repeat center center fixed;
-            background-size: cover;
-            background-color: var(--bg-light);
+            background: url('imagenes/fondo_1.jpg') no-repeat center center/cover;
             color: var(--text-light);
             display: flex;
             flex-direction: column;
@@ -26,7 +23,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Modo oscuro */
         @media (prefers-color-scheme: dark) {
             body {
                 background-color: var(--bg-dark);
@@ -59,6 +55,55 @@
         @media (prefers-color-scheme: dark) {
             .generator { background: rgba(40, 40, 40, 0.9); }
         }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .password-display {
+            word-break: break-all;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .password-display { background: #333; }
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        button:hover { transform: scale(1.05); }
+
+        .tips {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .tips { color: #ccc; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -70,29 +115,12 @@
         <section class="generator">
             <div class="password-display" id="password">Haz clic en "Generar" para comenzar</div>
             <button onclick="generatePassword()">Generar</button>
+            <button onclick="copyPassword()">Copiar al portapapeles</button>
         </section>
     </main>
 
     <footer>
         <p>© 2025 Generador de Contraseñas - Creado con xAI</p>
     </footer>
-
-    <script>
-        const characters = {
-            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            lowercase: 'abcdefghijklmnopqrstuvwxyz',
-            numbers: '0123456789',
-            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
-        };
-
-        function generatePassword() {
-            const length = 16;
-            let charSet = characters.uppercase + characters.lowercase + characters.numbers + characters.symbols;
-            let passwordArray = new Uint8Array(length);
-            window.crypto.getRandomValues(passwordArray);
-            let password = Array.from(passwordArray, byte => charSet[byte % charSet.length]).join('');
-            document.getElementById('password').textContent = password;
-        }
-    </script>
 </body>
 </html>
