@@ -56,12 +56,6 @@
             .generator { background: rgba(40, 40, 40, 0.9); }
         }
 
-        .options {
-            display: grid;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
         .password-display {
             word-break: break-all;
             padding: 1rem;
@@ -88,16 +82,6 @@
 
         button:hover { transform: scale(1.05); }
 
-        .tips {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .tips { color: #ccc; }
-        }
-
         footer {
             text-align: center;
             padding: 1rem;
@@ -122,5 +106,27 @@
     <footer>
         <p>© 2025 Generador de Contraseñas - Creado con xAI</p>
     </footer>
+
+    <script>
+        function generatePassword() {
+            const length = 12;
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            document.getElementById("password").textContent = password;
+        }
+
+        function copyPassword() {
+            const passwordText = document.getElementById("password").textContent;
+            navigator.clipboard.writeText(passwordText).then(() => {
+                alert("Contraseña copiada al portapapeles");
+            }).catch(() => {
+                alert("Error al copiar la contraseña");
+            });
+        }
+    </script>
 </body>
 </html>
