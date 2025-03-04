@@ -16,7 +16,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-light);
+            background: url('imagenes/fondo_1.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: var(--text-light);
             display: flex;
             flex-direction: column;
@@ -57,65 +58,6 @@
         @media (prefers-color-scheme: dark) {
             .generator { background: rgba(40, 40, 40, 0.9); }
         }
-
-        .options {
-            display: grid;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .password-display {
-            word-break: break-all;
-            padding: 1rem;
-            background: #f5f5f5;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            position: relative;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .password-display { background: #333; }
-        }
-
-        .strength {
-            margin-top: 0.5rem;
-            font-weight: bold;
-        }
-
-        button {
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        button:hover { transform: scale(1.05); }
-
-        .tips {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .tips { color: #ccc; }
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        @media (max-width: 600px) {
-            main { padding: 1rem; }
-            .options { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -126,108 +68,12 @@
     <main>
         <section class="generator">
             <div class="password-display" id="password">Haz clic en "Generar" para comenzar</div>
-            <div class="strength" id="strength"></div>
-            <div class="options">
-                <label>Longitud: <input type="number" id="length" min="8" max="50" value="16"></label>
-                <label><input type="checkbox" id="uppercase" checked> Mayúsculas (A-Z)</label>
-                <label><input type="checkbox" id="lowercase" checked> Minúsculas (a-z)</label>
-                <label><input type="checkbox" id="numbers" checked> Números (0-9)</label>
-                <label><input type="checkbox" id="symbols" checked> Símbolos (!@#$%)</label>
-            </div>
             <button onclick="generatePassword()">Generar</button>
-            <button onclick="copyPassword()">Copiar al portapapeles</button>
-        </section>
-
-        <section class="tips">
-            <h3>Consejos de Seguridad:</h3>
-            <ul>
-                <li>No reutilices contraseñas en diferentes cuentas.</li>
-                <li>Usa un administrador de contraseñas para almacenarlas.</li>
-                <li>Combina letras, números y símbolos para mayor seguridad.</li>
-            </ul>
         </section>
     </main>
 
     <footer>
         <p>© 2025 Generador de Contraseñas - Creado con xAI</p>
     </footer>
-
-    <script>
-        // Caracteres disponibles para la generación de contraseñas
-        const characters = {
-            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            lowercase: 'abcdefghijklmnopqrstuvwxyz',
-            numbers: '0123456789',
-            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
-        };
-
-        // Elementos del DOM
-        const passwordDisplay = document.getElementById('password');
-        const strengthDisplay = document.getElementById('strength');
-
-        // Función para generar contraseña segura
-        function generatePassword() {
-            const length = parseInt(document.getElementById('length').value);
-            const useUppercase = document.getElementById('uppercase').checked;
-            const useLowercase = document.getElementById('lowercase').checked;
-            const useNumbers = document.getElementById('numbers').checked;
-            const useSymbols = document.getElementById('symbols').checked;
-
-            let charSet = '';
-            if (useUppercase) charSet += characters.uppercase;
-            if (useLowercase) charSet += characters.lowercase;
-            if (useNumbers) charSet += characters.numbers;
-            if (useSymbols) charSet += characters.symbols;
-
-            if (charSet === '') {
-                alert('Selecciona al menos un tipo de carácter.');
-                return;
-            }
-
-            // Usar crypto para mayor seguridad
-            const randomValues = new Uint8Array(length);
-            window.crypto.getRandomValues(randomValues);
-            let password = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = randomValues[i] % charSet.length;
-                password += charSet[randomIndex];
-            }
-
-            passwordDisplay.textContent = password;
-            evaluateStrength(password);
-        }
-
-        // Evaluar la fuerza de la contraseña
-        function evaluateStrength(password) {
-            let score = 0;
-            if (password.length >= 12) score += 2;
-            else if (password.length >= 8) score += 1;
-            if (/[A-Z]/.test(password)) score += 1;
-            if (/[a-z]/.test(password)) score += 1;
-            if (/[0-9]/.test(password)) score += 1;
-            if (/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) score += 1;
-
-            if (score >= 5) {
-                strengthDisplay.textContent = 'Fuerte';
-                strengthDisplay.style.color = 'green';
-            } else if (score >= 3) {
-                strengthDisplay.textContent = 'Media';
-                strengthDisplay.style.color = 'orange';
-            } else {
-                strengthDisplay.textContent = 'Débil';
-                strengthDisplay.style.color = 'red';
-            }
-        }
-
-        // Copiar contraseña al portapapeles
-        function copyPassword() {
-            const password = passwordDisplay.textContent;
-            if (password && password !== 'Haz clic en "Generar" para comenzar') {
-                navigator.clipboard.writeText(password)
-                    .then(() => alert('Contraseña copiada al portapapeles'))
-                    .catch(() => alert('Error al copiar la contraseña'));
-            }
-        }
-    </script>
 </body>
 </html>
