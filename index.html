@@ -76,5 +76,25 @@
     <footer>
         <p>© 2025 Generador de Contraseñas - Creado con xAI</p>
     </footer>
+
+    <script>
+        const characters = {
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            numbers: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        function generatePassword() {
+            const length = 16;
+            let charSet = characters.uppercase + characters.lowercase + characters.numbers + characters.symbols;
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charSet.length);
+                password += charSet[randomIndex];
+            }
+            document.getElementById('password').textContent = password;
+        }
+    </script>
 </body>
 </html>
